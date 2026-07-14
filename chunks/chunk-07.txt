@@ -1,0 +1,154 @@
+    <div class="password-wrap">
+                        <input type="password" id="registerPassword" autocomplete="new-password" minlength="6" placeholder="Mindestens 6 Zeichen" required />
+                        <button type="button" class="password-toggle" data-toggle-password="registerPassword" aria-label="Passwort anzeigen">◉</button>
+                      </div>
+                    </div>
+
+                    <div class="field">
+                      <label for="registerPasswordConfirm">Passwort bestätigen</label>
+                      <div class="password-wrap">
+                        <input type="password" id="registerPasswordConfirm" autocomplete="new-password" minlength="6" placeholder="Passwort wiederholen" required />
+                        <button type="button" class="password-toggle" data-toggle-password="registerPasswordConfirm" aria-label="Passwort anzeigen">◉</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <label class="checkbox-row">
+                    <input type="checkbox" id="registerTerms" required />
+                    <span>
+                      Ich stimme den Nutzungsbedingungen und der Verarbeitung meiner
+                      Angaben für diesen Plattform-Prototyp zu.
+                    </span>
+                  </label>
+
+                  <button class="btn btn-primary auth-submit" type="submit">
+                    Konto erstellen
+                  </button>
+
+                  <p class="auth-note">
+                    Das Passwort wird im Prototyp lokal als Hash gespeichert. Für
+                    einen echten Betrieb wird ein sicheres Backend benötigt.
+                  </p>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section class="view" id="view-dashboard">
+      <div class="dashboard">
+        <div class="container dashboard-layout">
+          <aside class="sidebar glass">
+            <div class="sidebar-user">
+              <div class="sidebar-user-top">
+                <div class="sidebar-avatar" id="sidebarAvatar">GN</div>
+                <div>
+                  <strong id="sidebarName">Nutzername</strong>
+                  <span id="sidebarChurch">GemeindeNetz</span>
+                </div>
+              </div>
+            </div>
+
+            <nav class="side-nav">
+              <button class="side-link active" data-dash-panel="overview">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+                  <path d="M4 4h6v6H4V4Zm10 0h6v6h-6V4ZM4 14h6v6H4v-6Zm10 0h6v6h-6v-6Z"/>
+                </svg>
+                <span>Übersicht</span>
+              </button>
+
+              <button class="side-link" data-dash-panel="posts">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+                  <path d="M5 5h14v14H5V5Z"/>
+                  <path d="M8 9h8M8 13h8M8 17h5" stroke-linecap="round"/>
+                </svg>
+                <span>Meine Beiträge</span>
+              </button>
+
+              <button class="side-link" data-dash-panel="messages">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+                  <path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/>
+                </svg>
+                <span>Nachrichten</span>
+              </button>
+
+              <button class="side-link" data-dash-panel="profile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+                  <circle cx="12" cy="8" r="4"/>
+                  <path d="M4 21c.8-4.2 3.5-6 8-6s7.2 1.8 8 6" stroke-linecap="round"/>
+                </svg>
+                <span>Profil</span>
+              </button>
+            </nav>
+
+            <div class="side-divider"></div>
+
+            <button class="side-link" id="logoutButton">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+                <path d="M10 5H5v14h5M14 8l4 4-4 4M18 12H9" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Abmelden</span>
+            </button>
+          </aside>
+
+          <div class="dashboard-main">
+            <!-- OVERVIEW -->
+            <section class="dash-panel active" id="dash-overview">
+              <div class="welcome-card">
+                <div class="welcome-content">
+                  <div class="welcome-kicker"><i></i> Persönliches Dashboard</div>
+                  <h1 id="welcomeHeadline">Willkommen im GemeindeNetz.</h1>
+                  <p id="welcomeText">
+                    Verwalte deine Beiträge, Kontakte und Aktivitäten an einem Ort.
+                  </p>
+                  <div class="welcome-actions">
+                    <button class="btn btn-primary" data-open-post-modal>Neuen Beitrag erstellen</button>
+                    <button class="btn btn-ghost" data-dash-panel-jump="profile">Profil bearbeiten</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dashboard-stats">
+                <article class="dash-stat">
+                  <div class="dash-stat-top">
+                    <div class="dash-stat-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+                        <path d="M5 5h14v14H5V5Z"/>
+                        <path d="M8 9h8M8 13h8M8 17h5" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <strong id="statPosts">0</strong>
+                  <span>eigene Beiträge</span>
+                </article>
+
+                <article class="dash-stat">
+                  <div class="dash-stat-top">
+                    <div class="dash-stat-icon green">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+                        <path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <strong id="statMessages">3</strong>
+                  <span>neue Nachrichten</span>
+                </article>
+
+                <article class="dash-stat">
+                  <div class="dash-stat-top">
+                    <div class="dash-stat-icon orange">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+                        <path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <strong id="statSaved">5</strong>
+                  <span>gespeicherte Beiträge</span>
+                </article>
+
+                <article class="dash-stat">
+                  <div class="dash-stat-top">
+                    <
