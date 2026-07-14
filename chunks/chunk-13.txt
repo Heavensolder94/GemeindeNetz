@@ -1,0 +1,31 @@
+t").addEventListener("click", logout);
+
+    document.getElementById("deleteAccountButton").addEventListener("click", () => {
+      const user = state.currentUser;
+      if (!user) return;
+
+      const confirmed = confirm(
+        `Das lokale Nutzerkonto von ${user.firstName} ${user.lastName} und alle zugehörigen Beiträge wirklich löschen?`
+      );
+
+      if (!confirmed) return;
+
+      saveUsers(getUsers().filter(item => item.id !== user.id));
+      savePosts(getPosts().filter(post => post.ownerId !== user.id));
+      logout();
+      showToast("Das lokale Nutzerkonto wurde gelöscht.");
+    });
+
+    restoreSession();
+
+    const initialHash = location.hash.replace("#", "");
+    if (initialHash === "dashboard" && state.currentUser) {
+      routeTo("dashboard");
+    } else if (initialHash === "auth") {
+      routeTo("auth", { authTab: "login" });
+    } else {
+      routeTo("home");
+    }
+  </script>
+</body>
+</html>
