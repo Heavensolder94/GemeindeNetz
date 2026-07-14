@@ -1,0 +1,175 @@
+            </div>
+            </section>
+
+            <!-- PROFILE -->
+            <section class="dash-panel" id="dash-profile">
+              <div class="dashboard-section-head">
+                <div>
+                  <div class="section-kicker">Nutzerkonto</div>
+                  <h2>Profil verwalten</h2>
+                  <p>Deine Angaben werden dem aktuell angemeldeten Nutzerkonto zugeordnet.</p>
+                </div>
+              </div>
+
+              <div class="profile-grid">
+                <article class="panel-card profile-summary">
+                  <div class="profile-avatar-large" id="profileAvatarLarge">GN</div>
+                  <h3 id="profileDisplayName">Nutzername</h3>
+                  <p id="profileDisplayChurch">Gemeinde oder Organisation</p>
+                  <div class="profile-badges">
+                    <span class="profile-badge" id="profileRoleBadge">Rolle</span>
+                    <span class="profile-badge" id="profileLocationBadge">Ort</span>
+                  </div>
+                  <div class="profile-actions">
+                    <button class="btn btn-ghost" id="profileLogout">Abmelden</button>
+                    <button class="btn btn-danger" id="deleteAccountButton">Konto lokal löschen</button>
+                  </div>
+                </article>
+
+                <article class="panel-card">
+                  <div class="panel-head">
+                    <div>
+                      <h3>Profildaten bearbeiten</h3>
+                      <p>Änderungen werden lokal im Nutzerkonto gespeichert.</p>
+                    </div>
+                  </div>
+
+                  <form id="profileForm">
+                    <div class="form-grid">
+                      <div class="field">
+                        <label for="profileFirstName">Vorname</label>
+                        <input id="profileFirstName" required />
+                      </div>
+
+                      <div class="field">
+                        <label for="profileLastName">Nachname</label>
+                        <input id="profileLastName" required />
+                      </div>
+
+                      <div class="field full">
+                        <label for="profileEmail">E-Mail-Adresse</label>
+                        <input type="email" id="profileEmail" disabled />
+                      </div>
+
+                      <div class="field">
+                        <label for="profileRole">Rolle</label>
+                        <select id="profileRole">
+                          <option value="Gemeinde">Gemeinde</option>
+                          <option value="Werk">Christliches Werk</option>
+                          <option value="Mitarbeitender">Mitarbeitender</option>
+                          <option value="Ehrenamtlicher">Ehrenamtlicher</option>
+                        </select>
+                      </div>
+
+                      <div class="field">
+                        <label for="profileLocation">Ort</label>
+                        <input id="profileLocation" required />
+                      </div>
+
+                      <div class="field full">
+                        <label for="profileChurch">Gemeinde oder Organisation</label>
+                        <input id="profileChurch" required />
+                      </div>
+
+                      <div class="field full">
+                        <label for="profileBio">Kurzbeschreibung</label>
+                        <textarea id="profileBio" placeholder="Was ist dir in der Gemeindearbeit wichtig?"></textarea>
+                      </div>
+                    </div>
+
+                    <div class="modal-actions">
+                      <button class="btn btn-primary" type="submit">Änderungen speichern</button>
+                    </div>
+                  </form>
+                </article>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- POST MODAL -->
+  <div class="modal-backdrop" id="postModalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="postModalTitle">
+      <div class="modal-head">
+        <div>
+          <h3 id="postModalTitle">Neuen Beitrag erstellen</h3>
+          <p>Der Beitrag wird automatisch deinem Nutzerkonto zugeordnet.</p>
+        </div>
+        <button class="icon-btn" id="closePostModal" aria-label="Dialog schließen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m6 6 12 12M18 6 6 18" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <form id="postForm">
+        <div class="form-grid">
+          <div class="field">
+            <label for="postType">Beitragstyp</label>
+            <select id="postType" required>
+              <option value="offer">Wir bieten</option>
+              <option value="search">Wir suchen</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="postCategory">Kategorie</label>
+            <select id="postCategory" required>
+              <option>Technik</option>
+              <option>Räume</option>
+              <option>Mitarbeit</option>
+              <option>Veranstaltungen</option>
+              <option>Material</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label for="postTitle">Titel</label>
+            <input id="postTitle" placeholder="z. B. Tonanlage für Jugendabend verfügbar" required />
+          </div>
+
+          <div class="field full">
+            <label for="postDescription">Beschreibung</label>
+            <textarea id="postDescription" placeholder="Was genau wird angeboten oder gesucht?" required></textarea>
+          </div>
+
+          <div class="field">
+            <label for="postDate">Zeitraum oder Datum</label>
+            <input id="postDate" placeholder="z. B. ab sofort" />
+          </div>
+
+          <div class="field">
+            <label for="postImage">Bildauswahl</label>
+            <select id="postImage">
+              <option value="tech">Technik</option>
+              <option value="room">Räume</option>
+              <option value="team">Mitarbeit</option>
+              <option value="event">Veranstaltung</option>
+              <option value="material">Material</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="cancelPostModal">Abbrechen</button>
+          <button type="submit" class="btn btn-primary">Beitrag veröffentlichen</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Gespeichert.</div>
+
+  <script>
+    const STORAGE_KEYS = {
+      users: "gemeindenetz_users_v3",
+      session: "gemeindenetz_session_v3",
+      posts: "gemeindenetz_posts_v3"
+    };
+
+    const imageLibrary = {
+      tech: "https://images.pexels.com/photos/164938/pexels-photo-164938.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  
