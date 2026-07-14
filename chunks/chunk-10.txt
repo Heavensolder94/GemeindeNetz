@@ -1,0 +1,208 @@
+    room: "https://images.pexels.com/photos/2608517/pexels-photo-2608517.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      team: "https://images.pexels.com/photos/3184308/pexels-photo-3184308.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      event: "https://images.pexels.com/photos/7520945/pexels-photo-7520945.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      material: "https://images.pexels.com/photos/8535239/pexels-photo-8535239.jpeg?auto=compress&cs=tinysrgb&w=1200"
+    };
+
+    const state = {
+      currentUser: null,
+      activeAuthTab: "login",
+      activeDashboardPanel: "overview"
+    };
+
+    function storageGet(key, fallback) {
+      try {
+        const value = localStorage.getItem(key);
+        return value ? JSON.parse(value) : fallback;
+      } catch (error) {
+        console.warn("Lokaler Speicher nicht verfügbar:", error);
+        return fallback;
+      }
+    }
+
+    function storageSet(key, value) {
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+        return true;
+      } catch (error) {
+        console.warn("Lokaler Speicher nicht verfügbar:", error);
+        return false;
+      }
+    }
+
+    function storageRemove(key) {
+      try {
+        localStorage.removeItem(key);
+      } catch (error) {
+        console.warn("Lokaler Speicher nicht verfügbar:", error);
+      }
+    }
+
+    function createId() {
+      if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+      return "id-" + Date.now() + "-" + Math.random().toString(16).slice(2);
+    }
+
+    async function hashPassword(password) {
+      if (window.crypto && crypto.subtle) {
+        const data = new TextEncoder().encode(password);
+        const digest = await crypto.subtle.digest("SHA-256", data);
+        return Array.from(new Uint8Array(digest))
+          .map(byte => byte.toString(16).padStart(2, "0"))
+          .join("");
+      }
+      return btoa(unescape(encodeURIComponent(password)));
+    }
+
+    function getUsers() {
+      return storageGet(STORAGE_KEYS.users, []);
+    }
+
+    function saveUsers(users) {
+      storageSet(STORAGE_KEYS.users, users);
+    }
+
+    function getPosts() {
+      return storageGet(STORAGE_KEYS.posts, []);
+    }
+
+    function savePosts(posts) {
+      storageSet(STORAGE_KEYS.posts, posts);
+    }
+
+    function getInitials(user) {
+      if (!user) return "GN";
+      const first = (user.firstName || "").trim().charAt(0);
+      const last = (user.lastName || "").trim().charAt(0);
+      return (first + last).toUpperCase() || "GN";
+    }
+
+    function routeTo(route, options = {}) {
+      document.querySelectorAll(".view").forEach(view => view.classList.remove("active"));
+      const target = document.getElementById("view-" + route);
+
+      if (route === "dashboard" && !state.currentUser) {
+        return routeTo("auth", { authTab: "login" });
+      }
+
+      if (target) target.classList.add("active");
+
+      document.querySelectorAll("[data-route]").forEach(link => {
+        link.classList.toggle("active", link.dataset.route === route);
+      });
+
+      if (route === "auth") {
+        switchAuthTab(options.authTab || state.activeAuthTab || "login");
+      }
+
+      if (route === "dashboard") {
+        renderDashboard();
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      history.replaceState(null, "", "#" + route);
+    }
+
+    function switchAuthTab(tab) {
+      state.activeAuthTab = tab;
+      document.querySelectorAll("[data-auth-switch]").forEach(button => {
+        button.classList.toggle("active", button.dataset.authSwitch === tab);
+      });
+
+      document.querySelectorAll(".auth-form").forEach(form => form.classList.remove("active"));
+      document.getElementById(tab === "login" ? "loginForm" : "registerForm").classList.add("active");
+
+      const headline = document.getElementById("authHeadline");
+      const intro = document.getElementById("authIntro");
+
+      if (tab === "login") {
+        headline.textContent = "Willkommen zurück.";
+        intro.textContent = "Melde dich an und öffne dein persönliches Dashboard.";
+      } else {
+        headline.textContent = "Konto erstellen.";
+        intro.textContent = "Registriere dich und richte dein persönliches GemeindeNetz-Profil ein.";
+      }
+
+      clearAuthMessages();
+    }
+
+    function clearAuthMessages() {
+      document.getElementById("authError").classList.remove("show");
+      document.getElementById("authSuccess").classList.remove("show");
+    }
+
+    function showAuthError(message) {
+      const box = document.getElementById("authError");
+      box.textContent = message;
+      box.classList.add("show");
+      document.getElementById("authSuccess").classList.remove("show");
+    }
+
+    function showAuthSuccess(message) {
+      const box = document.getElementById("authSuccess");
+      box.textContent = message;
+      box.classList.add("show");
+      document.getElementById("authError").classList.remove("show");
+    }
+
+    function setSession(userId, persistent = true) {
+      state.currentUser = getUsers().find(user => user.id === userId) || null;
+      if (persistent) {
+        storageSet(STORAGE_KEYS.session, { userId });
+      } else {
+        storageRemove(STORAGE_KEYS.session);
+      }
+      updateNavigation();
+    }
+
+    function restoreSession() {
+      const session = storageGet(STORAGE_KEYS.session, null);
+      if (!session || !session.userId) return;
+      state.currentUser = getUsers().find(user => user.id === session.userId) || null;
+      updateNavigation();
+    }
+
+    function updateNavigation() {
+      const loggedIn = Boolean(state.currentUser);
+      document.getElementById("loggedOutActions").classList.toggle("hidden", loggedIn);
+      document.getElementById("loggedInActions").classList.toggle("hidden", !loggedIn);
+
+      if (loggedIn) {
+        document.getElementById("navAvatar").textContent = getInitials(state.currentUser);
+      }
+    }
+
+    function logout() {
+      state.currentUser = null;
+      storageRemove(STORAGE_KEYS.session);
+      updateNavigation();
+      showToast("Du wurdest abgemeldet.");
+      routeTo("home");
+    }
+
+    function showDashboardPanel(panel) {
+      state.activeDashboardPanel = panel;
+
+      document.querySelectorAll(".dash-panel").forEach(item => item.classList.remove("active"));
+      document.getElementById("dash-" + panel).classList.add("active");
+
+      document.querySelectorAll("[data-dash-panel]").forEach(button => {
+        button.classList.toggle("active", button.dataset.dashPanel === panel);
+      });
+
+      if (panel === "posts") renderUserPosts();
+      if (panel === "profile") fillProfileForm();
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function renderDashboard() {
+      const user = state.currentUser;
+      if (!user) return;
+
+      const initials = getInitials(user);
+      const fullName = `${user.firstName} ${user.lastName}`.trim();
+      const firstName = user.firstName || "Willkommen";
+
+      document.getElementById("sidebarAvatar").textContent = initials;
+      document.getElementB
