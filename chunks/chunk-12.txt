@@ -1,0 +1,201 @@
+ementById("registerChurch").value.trim();
+      const password = document.getElementById("registerPassword").value;
+      const confirmPassword = document.getElementById("registerPasswordConfirm").value;
+
+      if (password.length < 6) {
+        showAuthError("Das Passwort muss mindestens 6 Zeichen lang sein.");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showAuthError("Die eingegebenen Passwörter stimmen nicht überein.");
+        return;
+      }
+
+      const users = getUsers();
+      if (users.some(user => user.email === email)) {
+        showAuthError("Für diese E-Mail-Adresse besteht bereits ein Nutzerkonto.");
+        return;
+      }
+
+      const passwordHash = await hashPassword(password);
+      const user = {
+        id: createId(),
+        firstName,
+        lastName,
+        email,
+        role,
+        location,
+        church,
+        bio: "",
+        passwordHash,
+        createdAt: Date.now()
+      };
+
+      users.push(user);
+      saveUsers(users);
+      setSession(user.id, true);
+      document.getElementById("registerForm").reset();
+      showToast("Dein Nutzerkonto wurde erstellt.");
+      state.activeDashboardPanel = "overview";
+      routeTo("dashboard");
+    });
+
+    document.getElementById("loginForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      clearAuthMessages();
+
+      const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+      const password = document.getElementById("loginPassword").value;
+      const passwordHash = await hashPassword(password);
+
+      const user = getUsers().find(item => item.email === email && item.passwordHash === passwordHash);
+
+      if (!user) {
+        showAuthError("E-Mail-Adresse oder Passwort ist nicht korrekt.");
+        return;
+      }
+
+      const persistent = document.getElementById("rememberLogin").checked;
+      setSession(user.id, persistent);
+      showToast("Erfolgreich angemeldet.");
+      state.activeDashboardPanel = "overview";
+      routeTo("dashboard");
+    });
+
+    document.getElementById("demoLogin").addEventListener("click", async () => {
+      let users = getUsers();
+      let demoUser = users.find(user => user.email === "demo@gemeindenetz.de");
+
+      if (!demoUser) {
+        demoUser = {
+          id: createId(),
+          firstName: "Demo",
+          lastName: "Gemeinde",
+          email: "demo@gemeindenetz.de",
+          role: "Gemeinde",
+          location: "Lemgo",
+          church: "GemeindeNetz Demo",
+          bio: "Wir testen die digitale Vernetzung von Gemeinden und christlichen Werken.",
+          passwordHash: await hashPassword("demo123"),
+          createdAt: Date.now()
+        };
+
+        users.push(demoUser);
+        saveUsers(users);
+
+        const posts = getPosts();
+        posts.push(
+          {
+            id: createId(),
+            ownerId: demoUser.id,
+            type: "offer",
+            category: "Technik",
+            title: "Mobile Tonanlage für Jugendveranstaltungen",
+            description: "Digitale Mischkonsole, zwei Aktivboxen und Funkmikrofone können regional ausgeliehen werden.",
+            date: "Ab sofort",
+            location: "Lemgo",
+            image: imageLibrary.tech,
+            createdAt: Date.now() - 30000
+          },
+          {
+            id: createId(),
+            ownerId: demoUser.id,
+            type: "search",
+            category: "Mitarbeit",
+            title: "Lobpreisteam für Jugendgottesdienst gesucht",
+            description: "Für einen regionalen Jugendgottesdienst suchen wir Musikerinnen und Musiker.",
+            date: "17. Oktober 2026",
+            location: "Lemgo",
+            image: imageLibrary.event,
+            createdAt: Date.now() - 20000
+          }
+        );
+        savePosts(posts);
+      }
+
+      setSession(demoUser.id, true);
+      state.activeDashboardPanel = "overview";
+      showToast("Demo-Dashboard geöffnet.");
+      routeTo("dashboard");
+    });
+
+    document.querySelectorAll("[data-dash-panel]").forEach(button => {
+      button.addEventListener("click", () => showDashboardPanel(button.dataset.dashPanel));
+    });
+
+    document.querySelectorAll("[data-dash-panel-jump]").forEach(button => {
+      button.addEventListener("click", () => showDashboardPanel(button.dataset.dashPanelJump));
+    });
+
+    document.querySelectorAll("[data-open-post-modal]").forEach(button => {
+      button.addEventListener("click", openPostModal);
+    });
+
+    document.getElementById("closePostModal").addEventListener("click", closePostModal);
+    document.getElementById("cancelPostModal").addEventListener("click", closePostModal);
+
+    document.getElementById("postModalBackdrop").addEventListener("click", event => {
+      if (event.target.id === "postModalBackdrop") closePostModal();
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closePostModal();
+    });
+
+    document.getElementById("postForm").addEventListener("submit", event => {
+      event.preventDefault();
+
+      const user = state.currentUser;
+      if (!user) return;
+
+      const post = {
+        id: createId(),
+        ownerId: user.id,
+        type: document.getElementById("postType").value,
+        category: document.getElementById("postCategory").value,
+        title: document.getElementById("postTitle").value.trim(),
+        description: document.getElementById("postDescription").value.trim(),
+        date: document.getElementById("postDate").value.trim() || "Neu eingestellt",
+        location: user.location,
+        image: imageLibrary[document.getElementById("postImage").value] || imageLibrary.event,
+        createdAt: Date.now()
+      };
+
+      const posts = getPosts();
+      posts.push(post);
+      savePosts(posts);
+
+      document.getElementById("postForm").reset();
+      closePostModal();
+      state.activeDashboardPanel = "posts";
+      renderDashboard();
+      showToast("Dein Beitrag wurde veröffentlicht.");
+    });
+
+    document.getElementById("profileForm").addEventListener("submit", event => {
+      event.preventDefault();
+
+      const users = getUsers();
+      const index = users.findIndex(user => user.id === state.currentUser.id);
+      if (index < 0) return;
+
+      users[index] = {
+        ...users[index],
+        firstName: document.getElementById("profileFirstName").value.trim(),
+        lastName: document.getElementById("profileLastName").value.trim(),
+        role: document.getElementById("profileRole").value,
+        location: document.getElementById("profileLocation").value.trim(),
+        church: document.getElementById("profileChurch").value.trim(),
+        bio: document.getElementById("profileBio").value.trim()
+      };
+
+      saveUsers(users);
+      state.currentUser = users[index];
+      updateNavigation();
+      renderDashboard();
+      showToast("Profil wurde aktualisiert.");
+    });
+
+    document.getElementById("logoutButton").addEventListener("click", logout);
+    document.getElementById("profileLogou
