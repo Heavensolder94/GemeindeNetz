@@ -1,0 +1,154 @@
+div class="dash-stat-icon pink">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+                        <path d="M8 12.5 11 15l5-6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 3 5 6v5c0 4.6 2.8 8.4 7 10 4.2-1.6 7-5.4 7-10V6l-7-3Z" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <strong>100%</strong>
+                  <span>Profil eingerichtet</span>
+                </article>
+              </div>
+
+              <div class="dashboard-grid">
+                <article class="panel-card">
+                  <div class="panel-head">
+                    <div>
+                      <h3>Letzte Aktivitäten</h3>
+                      <p>Aktuelle Ereignisse in deinem Netzwerk.</p>
+                    </div>
+                  </div>
+
+                  <div class="activity-list">
+                    <div class="activity-item">
+                      <div class="activity-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M12 5v14M5 12h14" stroke-linecap="round"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <strong>Neuer passender Beitrag</strong>
+                        <span>Eine Gemeinde bietet Veranstaltungstechnik in deiner Region an.</span>
+                      </div>
+                      <div class="activity-time">Heute</div>
+                    </div>
+
+                    <div class="activity-item">
+                      <div class="activity-icon green">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <strong>Neue Kontaktanfrage</strong>
+                        <span>Christusgemeinde Bielefeld möchte sich mit dir vernetzen.</span>
+                      </div>
+                      <div class="activity-time">Gestern</div>
+                    </div>
+
+                    <div class="activity-item">
+                      <div class="activity-icon orange">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z" stroke-linejoin="round"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <strong>Beitrag gespeichert</strong>
+                        <span>„Workshop: Social Media für Gemeinden“ wurde vorgemerkt.</span>
+                      </div>
+                      <div class="activity-time">Mo.</div>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="panel-card">
+                  <div class="panel-head">
+                    <div>
+                      <h3>Schnellzugriff</h3>
+                      <p>Häufig genutzte Funktionen.</p>
+                    </div>
+                  </div>
+
+                  <div class="quick-actions">
+                    <button class="quick-action" data-open-post-modal>
+                      <div class="quick-action-icon">＋</div>
+                      <div>
+                        <strong>Beitrag erstellen</strong>
+                        <span>Angebot oder Gesuch veröffentlichen</span>
+                      </div>
+                    </button>
+
+                    <button class="quick-action" data-dash-panel-jump="posts">
+                      <div class="quick-action-icon">▤</div>
+                      <div>
+                        <strong>Meine Beiträge</strong>
+                        <span>Eigene Inhalte verwalten</span>
+                      </div>
+                    </button>
+
+                    <button class="quick-action" data-dash-panel-jump="messages">
+                      <div class="quick-action-icon">✉</div>
+                      <div>
+                        <strong>Nachrichten öffnen</strong>
+                        <span>Kontakte und Anfragen ansehen</span>
+                      </div>
+                    </button>
+                  </div>
+                </article>
+              </div>
+            </section>
+
+            <!-- POSTS -->
+            <section class="dash-panel" id="dash-posts">
+              <div class="dashboard-section-head">
+                <div>
+                  <div class="section-kicker">Meine Inhalte</div>
+                  <h2>Eigene Beiträge</h2>
+                  <p>Hier werden nur die Beiträge des aktuell angemeldeten Nutzers angezeigt.</p>
+                </div>
+                <button class="btn btn-primary" data-open-post-modal>Neuen Beitrag erstellen</button>
+              </div>
+
+              <div class="posts-grid" id="userPostsGrid"></div>
+            </section>
+
+            <!-- MESSAGES -->
+            <section class="dash-panel" id="dash-messages">
+              <div class="dashboard-section-head">
+                <div>
+                  <div class="section-kicker">Kontakte</div>
+                  <h2>Nachrichten</h2>
+                  <p>Kontaktanfragen und Unterhaltungen aus dem GemeindeNetz.</p>
+                </div>
+              </div>
+
+              <div class="panel-card">
+                <div class="message-list">
+                  <article class="message-item">
+                    <div class="message-avatar">CB</div>
+                    <div>
+                      <strong>Christusgemeinde Bielefeld</strong>
+                      <p>Hallo! Wir interessieren uns für eine Zusammenarbeit beim nächsten Jugendabend.</p>
+                    </div>
+                    <div class="message-time">10:42 Uhr</div>
+                  </article>
+
+                  <article class="message-item">
+                    <div class="message-avatar" style="background:linear-gradient(135deg,#0ba360,#3cba92)">JL</div>
+                    <div>
+                      <strong>Jugendnetz Lippe</strong>
+                      <p>Vielen Dank für deinen Beitrag. Können wir die Details zur Technik kurz abstimmen?</p>
+                    </div>
+                    <div class="message-time">Gestern</div>
+                  </article>
+
+                  <article class="message-item">
+                    <div class="message-avatar" style="background:linear-gradient(135deg,#f093fb,#f5576c)">KH</div>
+                    <div>
+                      <strong>Kirche am Markt</strong>
+                      <p>Wir haben dich zu unserem regionalen Medienteam-Netzwerk eingeladen.</p>
+                    </div>
+                    <div class="message-time">Montag</div>
+                  </article>
+                </div>
+  
