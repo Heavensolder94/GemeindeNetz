@@ -1,0 +1,172 @@
+ont-size: 2rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+
+      .welcome-card { padding: 23px; }
+      .welcome-actions .btn { width: 100%; }
+      .activity-item {
+        grid-template-columns: 42px 1fr;
+      }
+      .activity-time { display: none; }
+      .message-item {
+        grid-template-columns: 46px 1fr;
+      }
+      .message-time { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="nav-shell">
+    <nav class="nav glass">
+      <button class="brand nav-link" data-route="home" aria-label="GemeindeNetz Startseite">
+        <span class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M4 12.5 12 5l8 7.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7 11.5V20h10v-8.5M12 9v11" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span>GemeindeNetz</span>
+      </button>
+
+      <div class="nav-links" id="publicNavLinks">
+        <button class="nav-link active" data-route="home">Startseite</button>
+        <button class="nav-link" data-scroll-home="features">Vorteile</button>
+        <button class="nav-link" data-route="auth" data-auth-tab="register">Registrieren</button>
+      </div>
+
+      <div class="nav-actions" id="loggedOutActions">
+        <button class="btn btn-ghost" data-route="auth" data-auth-tab="login">Anmelden</button>
+        <button class="btn btn-primary" data-route="auth" data-auth-tab="register">Kostenlos registrieren</button>
+      </div>
+
+      <div class="nav-actions hidden" id="loggedInActions">
+        <button class="btn btn-ghost" data-route="dashboard">Dashboard</button>
+        <button class="avatar-button" id="navAvatar" data-route="dashboard">GN</button>
+      </div>
+    </nav>
+  </div>
+
+  <main>
+    <!-- HOME -->
+    <section class="view active" id="view-home">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <div class="eyebrow">
+              <span class="eyebrow-dot"></span>
+              Die digitale Plattform für Gemeinden
+            </div>
+            <h1>
+              Gemeinden verbinden.
+              <span class="gradient-text">Ressourcen teilen.</span>
+            </h1>
+            <p class="hero-copy">
+              Registriere dich als Gemeinde, Werk oder Mitarbeitender. Veröffentliche
+              Angebote und Gesuche, verwalte Kontakte und behalte alle Aktivitäten
+              in deinem persönlichen Dashboard im Blick.
+            </p>
+
+            <div class="hero-actions">
+              <button class="btn btn-primary" data-route="auth" data-auth-tab="register">
+                Jetzt registrieren
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <button class="btn btn-ghost" data-route="auth" data-auth-tab="login">
+                Bereits registriert
+              </button>
+            </div>
+
+            <div class="trust-row">
+              <span class="trust-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="m5 12 4 4L19 6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Eigenes Nutzerkonto
+              </span>
+              <span class="trust-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 3 5 6v5c0 4.6 2.8 8.4 7 10 4.2-1.6 7-5.4 7-10V6l-7-3Z" stroke-linejoin="round"/>
+                </svg>
+                Persönliches Dashboard
+              </span>
+              <span class="trust-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 12h10M12 7v10" stroke-linecap="round"/>
+                </svg>
+                Kostenlos starten
+              </span>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <div class="hero-image">
+              <div class="image-badge">GemeindeNetz Plattform</div>
+              <div class="floating-panel">
+                <strong>128</strong>
+                <span>Gemeinden bereits vernetzt</span>
+              </div>
+              <div class="image-content">
+                <h3>Ein Konto. Ein Netzwerk. Viele Möglichkeiten.</h3>
+                <p>
+                  Jeder Nutzer erhält ein eigenes Dashboard mit Profil,
+                  Beiträgen, Nachrichten und passenden Netzwerk-Aktivitäten.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="features">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Das Nutzerkonto</div>
+              <h2>Alles an einem Ort verwalten.</h2>
+              <p class="section-copy">
+                Die Plattform ist nicht nur eine öffentliche Website, sondern eine
+                persönliche Arbeitsoberfläche für jede registrierte Person und Gemeinde.
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-grid">
+            <article class="feature-card">
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+                  <circle cx="12" cy="8" r="4"/>
+                  <path d="M4 21c.8-4.2 3.5-6 8-6s7.2 1.8 8 6" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <h3>Persönliches Profil</h3>
+              <p>
+                Rolle, Gemeinde, Ort und Schwerpunkte werden im eigenen Profil
+                hinterlegt und können jederzeit geändert werden.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+                  <path d="M5 8h14M5 12h10M5 16h7" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <h3>Eigene Beiträge</h3>
+              <p>
+                Angebote und Gesuche werden direkt im Dashboard erstellt, verwaltet
+                und nur dem jeweiligen Nutzerkonto zugeordnet.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon orange">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+                  <path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <h3>Nachrichten & Kontakte</h3>
+              <p>
+                Kontaktanfragen und neue Netzwerk-Aktivitäten werden übersichtlich
+               
