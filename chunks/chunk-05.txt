@@ -169,4 +169,4 @@ ont-size: 2rem; }
               <h3>Nachrichten & Kontakte</h3>
               <p>
                 Kontaktanfragen und neue Netzwerk-Aktivitäten werden übersichtlich
-               
+              
