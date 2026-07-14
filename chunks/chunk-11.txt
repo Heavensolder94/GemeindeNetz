@@ -1,0 +1,174 @@
+yId("sidebarName").textContent = fullName;
+      document.getElementById("sidebarChurch").textContent = user.church || user.role;
+
+      document.getElementById("welcomeHeadline").textContent = `Willkommen, ${firstName}.`;
+      document.getElementById("welcomeText").textContent =
+        `${user.church || "Dein Profil"} ist jetzt Teil des GemeindeNetzwerks. Verwalte deine Beiträge, Kontakte und Aktivitäten an einem Ort.`;
+
+      const userPosts = getPosts().filter(post => post.ownerId === user.id);
+      document.getElementById("statPosts").textContent = userPosts.length;
+
+      renderUserPosts();
+      fillProfileForm();
+      showDashboardPanel(state.activeDashboardPanel || "overview");
+    }
+
+    function renderUserPosts() {
+      const grid = document.getElementById("userPostsGrid");
+      const user = state.currentUser;
+      if (!user) return;
+
+      const posts = getPosts()
+        .filter(post => post.ownerId === user.id)
+        .sort((a, b) => b.createdAt - a.createdAt);
+
+      if (!posts.length) {
+        grid.innerHTML = `
+          <div class="empty-dashboard">
+            <strong style="display:block;color:#30353d;font-size:1.05rem">Noch keine eigenen Beiträge.</strong>
+            <span style="display:block;margin-top:8px">Erstelle dein erstes Angebot oder Gesuch direkt im Dashboard.</span>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = posts.map(post => `
+        <article class="post-card">
+          <div class="post-image" style="background-image:url('${post.image}')"></div>
+          <div class="post-body">
+            <span class="post-type ${post.type === "search" ? "search" : ""}">
+              ${post.type === "offer" ? "Wir bieten" : "Wir suchen"}
+            </span>
+            <h3>${escapeHtml(post.title)}</h3>
+            <p>${escapeHtml(post.description)}</p>
+            <div class="post-meta">
+              <span>${escapeHtml(post.category)}</span>
+              <span>${escapeHtml(post.location || user.location)}</span>
+              <span>${escapeHtml(post.date || "Neu eingestellt")}</span>
+            </div>
+            <div class="post-actions">
+              <button class="btn btn-ghost btn-small" onclick="showToast('Bearbeitungsfunktion als nächster Ausbauschritt.')">Bearbeiten</button>
+              <button class="btn btn-danger btn-small" onclick="deletePost('${post.id}')">Löschen</button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function deletePost(postId) {
+      const user = state.currentUser;
+      if (!user) return;
+      const posts = getPosts();
+      const post = posts.find(item => item.id === postId && item.ownerId === user.id);
+      if (!post) return;
+
+      const confirmed = confirm(`Beitrag „${post.title}“ wirklich löschen?`);
+      if (!confirmed) return;
+
+      savePosts(posts.filter(item => item.id !== postId));
+      renderDashboard();
+      showToast("Beitrag wurde gelöscht.");
+    }
+
+    window.deletePost = deletePost;
+
+    function fillProfileForm() {
+      const user = state.currentUser;
+      if (!user) return;
+
+      const initials = getInitials(user);
+      const fullName = `${user.firstName} ${user.lastName}`.trim();
+
+      document.getElementById("profileAvatarLarge").textContent = initials;
+      document.getElementById("profileDisplayName").textContent = fullName;
+      document.getElementById("profileDisplayChurch").textContent = user.church || "Keine Organisation angegeben";
+      document.getElementById("profileRoleBadge").textContent = user.role;
+      document.getElementById("profileLocationBadge").textContent = user.location;
+
+      document.getElementById("profileFirstName").value = user.firstName || "";
+      document.getElementById("profileLastName").value = user.lastName || "";
+      document.getElementById("profileEmail").value = user.email || "";
+      document.getElementById("profileRole").value = user.role || "Gemeinde";
+      document.getElementById("profileLocation").value = user.location || "";
+      document.getElementById("profileChurch").value = user.church || "";
+      document.getElementById("profileBio").value = user.bio || "";
+    }
+
+    function openPostModal() {
+      if (!state.currentUser) {
+        routeTo("auth", { authTab: "login" });
+        return;
+      }
+      const backdrop = document.getElementById("postModalBackdrop");
+      backdrop.classList.add("open");
+      backdrop.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closePostModal() {
+      const backdrop = document.getElementById("postModalBackdrop");
+      backdrop.classList.remove("open");
+      backdrop.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    const toast = document.getElementById("toast");
+    let toastTimer;
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
+    }
+
+    window.showToast = showToast;
+
+    document.querySelectorAll("[data-route]").forEach(button => {
+      button.addEventListener("click", () => {
+        const route = button.dataset.route;
+        const authTab = button.dataset.authTab;
+        routeTo(route, { authTab });
+      });
+    });
+
+    document.querySelectorAll("[data-scroll-home]").forEach(button => {
+      button.addEventListener("click", () => {
+        routeTo("home");
+        setTimeout(() => {
+          document.getElementById(button.dataset.scrollHome)?.scrollIntoView({ behavior: "smooth" });
+        }, 60);
+      });
+    });
+
+    document.querySelectorAll("[data-auth-switch]").forEach(button => {
+      button.addEventListener("click", () => switchAuthTab(button.dataset.authSwitch));
+    });
+
+    document.querySelectorAll("[data-toggle-password]").forEach(button => {
+      button.addEventListener("click", () => {
+        const input = document.getElementById(button.dataset.togglePassword);
+        input.type = input.type === "password" ? "text" : "password";
+        button.textContent = input.type === "password" ? "◉" : "◌";
+      });
+    });
+
+    document.getElementById("registerForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      clearAuthMessages();
+
+      const firstName = document.getElementById("registerFirstName").value.trim();
+      const lastName = document.getElementById("registerLastName").value.trim();
+      const email = document.getElementById("registerEmail").value.trim().toLowerCase();
+      const role = document.getElementById("registerRole").value;
+      const location = document.getElementById("registerLocation").value.trim();
+      const church = document.getEl
